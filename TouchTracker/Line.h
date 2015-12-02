@@ -7,7 +7,7 @@
 //
 #import <UIKit/UIKit.h>
 
-@interface Line : NSObject
+@interface Line : NSObject <NSCoding>
 
 @property (nonatomic) CGPoint begin;
 @property (nonatomic) CGPoint end;

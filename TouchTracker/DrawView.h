@@ -8,6 +8,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DrawView : UIView
-
+@interface DrawView : UIView <NSCoding>
 @end

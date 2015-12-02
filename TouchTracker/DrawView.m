@@ -28,12 +28,32 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.linesProgress = [[NSMutableDictionary alloc] init];
-        self.finishedLines = [[NSMutableArray alloc] init];
-        self.backgroundColor = [UIColor grayColor];
-        self.multipleTouchEnabled = YES;
+//        NSFileManager *fileMgr = [NSFileManager defaultManager];
+//        [fileMgr removeItemAtPath:path error:nil];
+        _finishedLines = [[NSMutableArray alloc] init];
+        [self initOther];
     }
     return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)decoder{
+    self = [super initWithCoder:decoder];
+    if (self) {
+        _finishedLines = [decoder decodeObjectForKey:@"finishedLines"];
+        [self initOther];
+    }
+    return self;
+}
+
+- (void)initOther{
+    _linesProgress = [[NSMutableDictionary alloc] init];
+    self.backgroundColor = [UIColor grayColor];
+    self.multipleTouchEnabled = YES;
+}
+//序列化,反序列化
+- (void)encodeWithCoder:(NSCoder *)encoder{
+    [super encodeWithCoder:encoder];
+    [encoder encodeObject:self.finishedLines forKey:@"finishedLines"];
 }
 
 - (void)strokeLine:(Line *)line{
@@ -121,5 +141,6 @@
     }
     
 }
+
 @end
 

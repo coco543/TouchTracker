@@ -15,11 +15,27 @@
 @implementation DrawViewController
 
 - (void)viewDidLoad {
-    self.view = [[DrawView alloc] initWithFrame:CGRectZero];
+    self.view = [NSKeyedUnarchiver unarchiveObjectWithFile:[self filePath]];
+    if (!self.view) {
+        self.view = [[DrawView alloc] initWithFrame:CGRectZero];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    NSLog(@"View disappear");
+    [NSKeyedArchiver archiveRootObject:self.view toFile:[self filePath]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+//获取保存文件的路径
+- (NSString *)filePath
+{
+    NSString *path =[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"FinishedLines.archiver"];
+    NSLog(@"Path is :%@",path);
+    return path;
 }
 
 @end
