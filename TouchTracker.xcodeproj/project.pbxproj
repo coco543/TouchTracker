@@ -13,6 +13,9 @@
 		ED3E9C301C0E68F40053A8F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ED3E9C2E1C0E68F40053A8F5 /* LaunchScreen.storyboard */; };
 		ED3E9C3B1C0E68F40053A8F5 /* TouchTrackerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C3A1C0E68F40053A8F5 /* TouchTrackerTests.m */; };
 		ED3E9C461C0E68F40053A8F5 /* TouchTrackerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C451C0E68F40053A8F5 /* TouchTrackerUITests.m */; };
+		ED3E9C551C0E69990053A8F5 /* Line.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C541C0E69990053A8F5 /* Line.m */; };
+		ED3E9C581C0E6ACB0053A8F5 /* DrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */; };
+		ED3E9C5B1C0E6B610053A8F5 /* DrawViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C5A1C0E6B610053A8F5 /* DrawViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +49,12 @@
 		ED3E9C411C0E68F40053A8F5 /* TouchTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TouchTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED3E9C451C0E68F40053A8F5 /* TouchTrackerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TouchTrackerUITests.m; sourceTree = "<group>"; };
 		ED3E9C471C0E68F40053A8F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ED3E9C531C0E69990053A8F5 /* Line.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Line.h; sourceTree = "<group>"; };
+		ED3E9C541C0E69990053A8F5 /* Line.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Line.m; sourceTree = "<group>"; };
+		ED3E9C561C0E6ACB0053A8F5 /* DrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawView.h; sourceTree = "<group>"; };
+		ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawView.m; sourceTree = "<group>"; };
+		ED3E9C591C0E6B610053A8F5 /* DrawViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawViewController.h; sourceTree = "<group>"; };
+		ED3E9C5A1C0E6B610053A8F5 /* DrawViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +111,12 @@
 				ED3E9C2E1C0E68F40053A8F5 /* LaunchScreen.storyboard */,
 				ED3E9C311C0E68F40053A8F5 /* Info.plist */,
 				ED3E9C261C0E68F40053A8F5 /* Supporting Files */,
+				ED3E9C531C0E69990053A8F5 /* Line.h */,
+				ED3E9C541C0E69990053A8F5 /* Line.m */,
+				ED3E9C561C0E6ACB0053A8F5 /* DrawView.h */,
+				ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */,
+				ED3E9C591C0E6B610053A8F5 /* DrawViewController.h */,
+				ED3E9C5A1C0E6B610053A8F5 /* DrawViewController.m */,
 			);
 			path = TouchTracker;
 			sourceTree = "<group>";
@@ -265,6 +280,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				ED3E9C2B1C0E68F40053A8F5 /* AppDelegate.m in Sources */,
+				ED3E9C5B1C0E6B610053A8F5 /* DrawViewController.m in Sources */,
+				ED3E9C551C0E69990053A8F5 /* Line.m in Sources */,
+				ED3E9C581C0E6ACB0053A8F5 /* DrawView.m in Sources */,
 				ED3E9C281C0E68F40053A8F5 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -397,6 +415,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TouchTracker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cocos.TouchTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -408,6 +427,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TouchTracker/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Cocos.TouchTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
