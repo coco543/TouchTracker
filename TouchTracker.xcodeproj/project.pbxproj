@@ -16,6 +16,7 @@
 		ED3E9C551C0E69990053A8F5 /* Line.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C541C0E69990053A8F5 /* Line.m */; };
 		ED3E9C581C0E6ACB0053A8F5 /* DrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */; };
 		ED3E9C5B1C0E6B610053A8F5 /* DrawViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C5A1C0E6B610053A8F5 /* DrawViewController.m */; };
+		ED6E325A1C106333004E3B0B /* Round.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6E32591C106333004E3B0B /* Round.m */; };
 		EDF747DE1C0FC6350057EB26 /* ColorAdjust.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF747DD1C0FC6350057EB26 /* ColorAdjust.m */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +57,8 @@
 		ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawView.m; sourceTree = "<group>"; };
 		ED3E9C591C0E6B610053A8F5 /* DrawViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawViewController.h; sourceTree = "<group>"; };
 		ED3E9C5A1C0E6B610053A8F5 /* DrawViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawViewController.m; sourceTree = "<group>"; };
+		ED6E32581C106333004E3B0B /* Round.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Round.h; sourceTree = "<group>"; };
+		ED6E32591C106333004E3B0B /* Round.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Round.m; sourceTree = "<group>"; };
 		EDF747DC1C0FC6350057EB26 /* ColorAdjust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorAdjust.h; sourceTree = "<group>"; };
 		EDF747DD1C0FC6350057EB26 /* ColorAdjust.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorAdjust.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -116,6 +119,8 @@
 				ED3E9C261C0E68F40053A8F5 /* Supporting Files */,
 				ED3E9C531C0E69990053A8F5 /* Line.h */,
 				ED3E9C541C0E69990053A8F5 /* Line.m */,
+				ED6E32581C106333004E3B0B /* Round.h */,
+				ED6E32591C106333004E3B0B /* Round.m */,
 				EDF747DC1C0FC6350057EB26 /* ColorAdjust.h */,
 				EDF747DD1C0FC6350057EB26 /* ColorAdjust.m */,
 				ED3E9C561C0E6ACB0053A8F5 /* DrawView.h */,
@@ -289,6 +294,7 @@
 				ED3E9C551C0E69990053A8F5 /* Line.m in Sources */,
 				ED3E9C581C0E6ACB0053A8F5 /* DrawView.m in Sources */,
 				EDF747DE1C0FC6350057EB26 /* ColorAdjust.m in Sources */,
+				ED6E325A1C106333004E3B0B /* Round.m in Sources */,
 				ED3E9C281C0E68F40053A8F5 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
