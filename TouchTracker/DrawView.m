@@ -18,7 +18,7 @@
 @property (nonatomic,strong) NSMutableArray *finishedLines;
 @property (nonatomic,strong) NSMutableArray *finishedRounds;
 
-/*多点同时划线,要解决两个问题
+/*多点画图,要解决两个问题
  *1 要能同时保存多个触摸事件都应的起点位置
  *2 多个事件的终点和已经记录的起点要一一对应不能混淆
  */
