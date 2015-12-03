@@ -25,7 +25,6 @@
 - (void)encodeWithCoder:(NSCoder *)encoder{
     [encoder encodeObject:[NSValue valueWithCGPoint:self.begin] forKey:@"begin"];
     [encoder encodeObject:[NSValue valueWithCGPoint:self.end] forKey:@"end"];
-    
 }
 
 @end

@@ -14,11 +14,17 @@
 
 @implementation DrawViewController
 
-- (void)viewDidLoad {
-    self.view = [NSKeyedUnarchiver unarchiveObjectWithFile:[self filePath]];
-    if (!self.view) {
-        self.view = [[DrawView alloc] initWithFrame:CGRectZero];
+-(void)loadView{
+    NSLog(@"Invoke loadView");
+    //必须先将视图赋值给一个变量view.不能直接赋值给self.view,如果赋值给self.view的是nil,那么再对self.view做if判断的时候,系统又将重新调用loadView这个方法,造成死循环
+    UIView  *view = [NSKeyedUnarchiver unarchiveObjectWithFile:[self filePath]];
+    if (!view) {
+        view = [[DrawView alloc] initWithFrame:CGRectZero];
     }
+    self.view = view;
+}
+- (void)viewDidLoad {
+    NSLog(@"View didload");
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

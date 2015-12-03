@@ -8,6 +8,7 @@
 
 #import "DrawView.h"
 #import "Line.h"
+#import "ColorAdjust.h"
 
 @interface DrawView()
 
@@ -67,9 +68,12 @@
 }
 
 - (void)drawRect:(CGRect)rect{
-    //已经绘制过的点用黑色画出
-    [[UIColor blackColor] set];
+//    //已经绘制过的点用黑色画出
+//    [[UIColor blackColor] set];
     for (Line *l in self.finishedLines) {
+        //计算绘制线的弧度
+        CGFloat angle = atan2( (l.end.y - l.begin.y), (l.end.x - l.begin.x));
+        [[ColorAdjust makeUIColorFrom:[UIColor redColor] to:[UIColor greenColor] forAngle:angle] set];
         [self strokeLine:l];
     }
     if (self.linesProgress.count > 0) {

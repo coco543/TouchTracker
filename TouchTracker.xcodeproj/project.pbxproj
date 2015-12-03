@@ -16,6 +16,7 @@
 		ED3E9C551C0E69990053A8F5 /* Line.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C541C0E69990053A8F5 /* Line.m */; };
 		ED3E9C581C0E6ACB0053A8F5 /* DrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */; };
 		ED3E9C5B1C0E6B610053A8F5 /* DrawViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ED3E9C5A1C0E6B610053A8F5 /* DrawViewController.m */; };
+		EDF747DE1C0FC6350057EB26 /* ColorAdjust.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF747DD1C0FC6350057EB26 /* ColorAdjust.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawView.m; sourceTree = "<group>"; };
 		ED3E9C591C0E6B610053A8F5 /* DrawViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawViewController.h; sourceTree = "<group>"; };
 		ED3E9C5A1C0E6B610053A8F5 /* DrawViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawViewController.m; sourceTree = "<group>"; };
+		EDF747DC1C0FC6350057EB26 /* ColorAdjust.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorAdjust.h; sourceTree = "<group>"; };
+		EDF747DD1C0FC6350057EB26 /* ColorAdjust.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorAdjust.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +116,8 @@
 				ED3E9C261C0E68F40053A8F5 /* Supporting Files */,
 				ED3E9C531C0E69990053A8F5 /* Line.h */,
 				ED3E9C541C0E69990053A8F5 /* Line.m */,
+				EDF747DC1C0FC6350057EB26 /* ColorAdjust.h */,
+				EDF747DD1C0FC6350057EB26 /* ColorAdjust.m */,
 				ED3E9C561C0E6ACB0053A8F5 /* DrawView.h */,
 				ED3E9C571C0E6ACB0053A8F5 /* DrawView.m */,
 				ED3E9C591C0E6B610053A8F5 /* DrawViewController.h */,
@@ -283,6 +288,7 @@
 				ED3E9C5B1C0E6B610053A8F5 /* DrawViewController.m in Sources */,
 				ED3E9C551C0E69990053A8F5 /* Line.m in Sources */,
 				ED3E9C581C0E6ACB0053A8F5 /* DrawView.m in Sources */,
+				EDF747DE1C0FC6350057EB26 /* ColorAdjust.m in Sources */,
 				ED3E9C281C0E68F40053A8F5 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -501,6 +507,7 @@
 				ED3E9C4C1C0E68F40053A8F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		ED3E9C4D1C0E68F40053A8F5 /* Build configuration list for PBXNativeTarget "TouchTrackerTests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +516,7 @@
 				ED3E9C4F1C0E68F40053A8F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		ED3E9C501C0E68F40053A8F5 /* Build configuration list for PBXNativeTarget "TouchTrackerUITests" */ = {
 			isa = XCConfigurationList;
@@ -517,6 +525,7 @@
 				ED3E9C521C0E68F40053A8F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
