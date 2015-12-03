@@ -112,7 +112,7 @@
 }
 
 /**
- *  根据线的位置,返回一个以线段为对角线所在的正方形对应的内接圆的圆形和半径
+ *  根据线的位置,返回一个以线段为对角线所在的正方形对应的内接圆
  *
  *  @return Round *
  */
@@ -157,7 +157,6 @@
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //向控制台打印触摸事件
     NSLog(@"%@",NSStringFromSelector(_cmd));
-    int touchsCount = 0;
     for (UITouch *t in touches) {
         CGPoint location = [t locationInView:self];
         Line *l = [[Line alloc] init];
@@ -166,13 +165,10 @@
         NSValue *key = [NSValue valueWithNonretainedObject:t];
         self.linesProgress[key] = l;
         
-        if(touchsCount < 2){
+        //只捕获多点中的两个点,其他点自动舍弃
+        if([self.touchPoints count] < 2){
             self.touchPoints[key] = [NSValue valueWithCGPoint:location];
         }
-        if (touchsCount == 2) {
-            NSLog(@"tow");
-        }
-        touchsCount++;
     }
 //    UITouch *t = [touches anyObject];
 //    CGPoint location = [t locationInView:self];
