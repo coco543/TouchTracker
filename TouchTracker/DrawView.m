@@ -11,12 +11,14 @@
 #import "Round.h"
 #import "ColorAdjust.h"
 
-@interface DrawView()
+@interface DrawView() <UIGestureRecognizerDelegate,UIAlertViewDelegate>
 
 @property (nonatomic,strong) Line *currentLine;
+@property (nonatomic,weak) Line *selectedLine;
 @property (nonatomic,strong) Round *currentRound;
 @property (nonatomic,strong) NSMutableArray *finishedLines;
 @property (nonatomic,strong) NSMutableArray *finishedRounds;
+@property (nonatomic,strong) UIPanGestureRecognizer *moveRecognizer;
 
 /*多点画图,要解决两个问题
  *1 要能同时保存多个触摸事件都应的起点位置
@@ -28,6 +30,7 @@
 
 @implementation DrawView
 
+#pragma mark - 初始化
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -50,6 +53,29 @@
 }
 
 - (void)initOther{
+    //添加手势识别
+    UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
+    doubleTapRecognizer.numberOfTapsRequired = 2;
+    //延迟touchsBegin事件,这样开始双击时才不会在第一击的时候触发该事件
+    doubleTapRecognizer.delaysTouchesBegan = YES;
+    [self addGestureRecognizer:doubleTapRecognizer];
+    
+    //单击的时候并不会触发touchesBegan:withEvent等事件,所以也就不会在点击的时候出现一个点(极短的线)
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    //设置requireGestureRecognizerToFail:doubleTapRecognizer可以实现双击的时候不会在第一击触发单击手势
+    //[tapRecognizer requireGestureRecognizerToFail:doubleTapRecognizer];
+    [self addGestureRecognizer:tapRecognizer];
+    
+    //长按
+    UILongPressGestureRecognizer *pressRecongnizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
+    [self addGestureRecognizer:pressRecongnizer];
+    
+    self.moveRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveLine:)];
+    self.moveRecognizer.delegate = self;
+    //设置成NO(默认是YES)之后,触摸事件被该手势识别对象识别后,视图还能继续收到触摸事件,例如此处是移动手势,则移动的时候还可以收到touchesBegan:withEvent:,touchesMoved:withEvent:,touchesEnded:withEvent:事件.所以下面代码如果去掉的话,则视图不会接受到这些消息,也就无法画出线了.
+    self.moveRecognizer.cancelsTouchesInView = NO;
+    [self addGestureRecognizer:_moveRecognizer];
+    
     _linesProgress = [[NSMutableDictionary alloc] init];
     _touchPoints = [[NSMutableDictionary alloc] init];
     _finishedRounds = [[NSMutableArray alloc] init];
@@ -61,7 +87,109 @@
     [super encodeWithCoder:encoder];
     [encoder encodeObject:self.finishedLines forKey:@"finishedLines"];
 }
+#pragma mark - 处理手势委托
 
+-(void)doubleTap:(UIGestureRecognizer *)gr{
+    NSLog(@"Double tap");
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"操作" message:@"是否清空所有线段?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定",nil];
+    [alertView show];
+}
+
+-(void)tap:(UIGestureRecognizer *)gr{
+    NSLog(@"Single tap");
+    
+    CGPoint location = [gr locationInView:self];
+    self.selectedLine = [self lineAtPoint:location];
+    
+    if (self.selectedLine) {
+        
+        [self becomeFirstResponder];
+        //一个APP只能有一个UIMenuController
+        UIMenuController *menu = [UIMenuController sharedMenuController];
+        UIMenuItem *deleteItem = [[UIMenuItem alloc] initWithTitle:@"Delete" action:@selector(deleteLine:)];
+        menu.menuItems = @[deleteItem];
+        
+        //设置菜单的显示区域
+        [menu setTargetRect:CGRectMake(location.x, location.y, 2, 2) inView:self];
+        [menu setMenuVisible:YES animated:YES];
+    }else{
+        [[UIMenuController sharedMenuController] setMenuVisible:NO animated:YES];
+    }
+    [self setNeedsDisplay];
+}
+
+/**
+ *  长按开始,结束都会触发
+ *
+ *  @param gr 长按手势子对象
+ */
+-(void)longPress:(UIGestureRecognizer *)gr{
+    NSLog(@"Long press");
+    if (gr.state == UIGestureRecognizerStateBegan) {
+        CGPoint p = [gr locationInView:self];
+        self.selectedLine = [self lineAtPoint:p];
+        //如果选中了,则移除正在画的线
+        if (self.selectedLine) {
+            //[self.linesProgress removeAllObjects];
+        }
+    }else if (gr.state == UIGestureRecognizerStateEnded){
+        self.selectedLine = nil;
+    }
+    [self setNeedsDisplay];
+}
+
+/**
+ *  拖动手势会触发该方法
+ *
+ *  @param gr 因为代码要使用到拖动手势对象(手势对象的子对象)的拖动时当前位置的方法,所以声明时必须使用UIPanGestureRecognizer
+ */
+-(void)moveLine:(UIPanGestureRecognizer *)gr{
+    NSLog(@"Move gesture");
+    if (!self.selectedLine) {
+        return;
+    }
+    if (gr.state == UIGestureRecognizerStateChanged) {
+        //该座标记录了离拖动起始座标的偏移量,所以每一次拖动之后,必须把拖动的当前位置设置为拖动起始座标的偏移量,不然每一次的增量会累计了上一次的增量,造成增加速度比手指移动速度快
+        CGPoint translation = [gr translationInView:self];
+        CGPoint begin = self.selectedLine.begin;
+        CGPoint end = self.selectedLine.end;
+        begin.x += translation.x;
+        begin.y +=translation.y;
+        end.x +=translation.x;
+        end.y +=translation.y;
+        self.selectedLine.begin = begin;
+        self.selectedLine.end = end;
+        
+        [self setNeedsDisplay];
+        [gr setTranslation:CGPointZero inView:self];
+    }
+}
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
+    if (gestureRecognizer == self.moveRecognizer) {
+        return YES;
+    }
+    return NO;
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    switch (buttonIndex) {
+        case 1: //YES应该做的事
+            NSLog(@"Alert YES");
+            [self.finishedRounds removeAllObjects];
+            [self.finishedLines removeAllObjects];
+            [self.linesProgress removeAllObjects];
+            self.currentRound = nil;
+            [self setNeedsDisplay];
+            break;
+        case 0://NO应该做的事
+            NSLog(@"Alert NO");
+            break;
+    }
+}
+
+#pragma mark - 绘制与判断绘制内容
 - (void)strokeLine:(Line *)line{
     UIBezierPath *bp = [UIBezierPath bezierPath];
     bp.lineWidth = 10;
@@ -80,6 +208,36 @@
     [bp stroke];
     
 }
+
+-(Line *)lineAtPoint:(CGPoint)p{
+    //根据余弦定理求出触摸点和线段构成的三角形对应的角的度数
+    for (Line *l in self.finishedLines) {
+//        CGPoint begin = l.begin,end = l.end;
+//        //先求出三条线长度:记触摸点为P,begin点为A,end点为B,角A对应边长a,角B对应边长b,角P对应边长p
+//        CGFloat a = hypot(p.x - end.x, p.y - end.y);
+//        CGFloat b = hypot(p.x - begin.x, p.y - begin.y);
+//        CGFloat p = hypot(begin.x - end.x, begin.y - end.y);
+//        CGFloat cosP = (a*a + b*b - p*p) / 2*a*b;
+//        CGFloat angleP = acos(cosP) * 180 / M_PI;
+        
+        CGPoint start = l.begin;
+        CGPoint end = l.end;
+        for (float t = 0; t <= 1.0; t +=0.05) {
+            float x = start.x + t*(end.x - start.x);
+            float y = start.y + t*(end.y - start.y);
+            if (hypot(x - p.x, y - p.y) < 20.0) {
+                return l;
+            }
+        }
+    }
+    return nil;
+}
+
+-(void)deleteLine:(id)sender{
+    [self.finishedLines removeObject:self.selectedLine];
+    [self setNeedsDisplay];
+}
+
 
 - (void)drawRect:(CGRect)rect{
 //    已经绘制过的点用黑色画出
@@ -103,6 +261,11 @@
     self.currentRound = [self makeRound];
     if (self.currentRound) {
         [self strokeRound:self.currentRound];
+    }
+    
+    if (self.selectedLine) {
+        [[UIColor blueColor] set];
+        [self strokeLine:self.selectedLine];
     }
 //    if (self.currentLine) {
 //        [[UIColor redColor] set];
@@ -129,6 +292,7 @@
     CGFloat x2 = end.x;
     CGFloat y1 = begin.y;
     CGFloat y2 = end.y;
+    //可使用C函数 hypot
     CGFloat lienLength = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1));
     CGFloat radius = lienLength/2.0 * sin(M_PI_4);
     CGFloat xFixed = 0;
@@ -153,6 +317,7 @@
     return round;
 }
 
+#pragma mark - 处理UIResponder
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //向控制台打印触摸事件
@@ -202,7 +367,9 @@
     NSLog(@"%@",NSStringFromSelector(_cmd));
     for (UITouch *t in touches) {
         NSValue *key = [NSValue valueWithNonretainedObject:t];
-        [self.finishedLines addObject:self.linesProgress[key]];
+        if (self.linesProgress[key]) {
+            [self.finishedLines addObject:self.linesProgress[key]];
+        }
         [self.linesProgress removeObjectForKey:key];
         [self.touchPoints removeObjectForKey:key];
     }
@@ -226,6 +393,11 @@
         [self.touchPoints removeObjectForKey:key];
     }
     
+}
+
+//强调可以成为第一响应者之后才能设置成为第一响应者
+-(BOOL)canBecomeFirstResponder{
+    return YES;
 }
 
 @end
