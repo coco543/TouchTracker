@@ -11,6 +11,7 @@
 #import "Round.h"
 #import "ColorAdjust.h"
 
+
 @interface DrawView() <UIGestureRecognizerDelegate,UIAlertViewDelegate>
 
 @property (nonatomic,strong) Line *currentLine;
@@ -26,6 +27,8 @@
  */
 @property (nonatomic,strong) NSMutableDictionary *linesProgress;
 @property (nonatomic,strong) NSMutableDictionary *touchPoints;
+
+@property (nonatomic) CGFloat lineBezierPathWidth;
 @end
 
 @implementation DrawView
@@ -76,9 +79,16 @@
     self.moveRecognizer.cancelsTouchesInView = NO;
     [self addGestureRecognizer:_moveRecognizer];
     
+    //三个手指向上
+    UISwipeGestureRecognizer *swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipe:)];
+    [swipeRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
+    swipeRecognizer.numberOfTouchesRequired  = 3;
+    [self addGestureRecognizer:swipeRecognizer];
+    
     _linesProgress = [[NSMutableDictionary alloc] init];
     _touchPoints = [[NSMutableDictionary alloc] init];
     _finishedRounds = [[NSMutableArray alloc] init];
+    _lineBezierPathWidth = 10;
     self.backgroundColor = [UIColor grayColor];
     self.multipleTouchEnabled = YES;
 }
@@ -145,11 +155,24 @@
  */
 -(void)moveLine:(UIPanGestureRecognizer *)gr{
     NSLog(@"Move gesture");
-    if (!self.selectedLine) {
+    //速度
+    CGPoint velocity = [gr velocityInView:self];
+    CGFloat vlcX = fabs(velocity.x) , vlcY = fabs(velocity.y);
+    CGFloat maxValue = vlcX > vlcY ? vlcX : vlcY;
+    CGFloat pathWidth = 2 * maxValue / 200;
+    if (pathWidth < 5.0) {
+        pathWidth = 5.0;
+    }else if (pathWidth > 100){
+        pathWidth = 100;
+    }
+    self.lineBezierPathWidth = pathWidth;
+    //NSLog(@"Velocity:%@",[NSValue valueWithCGPoint:velocity]);
+    
+    if (!self.selectedLine || [UIMenuController sharedMenuController].isMenuVisible == YES) {
         return;
     }
     if (gr.state == UIGestureRecognizerStateChanged) {
-        //该座标记录了离拖动起始座标的偏移量,所以每一次拖动之后,必须把拖动的当前位置设置为拖动起始座标的偏移量,不然每一次的增量会累计了上一次的增量,造成增加速度比手指移动速度快
+        //该座标记录了离拖动起始座标的偏移量,所以每一次拖动之后,必须把拖动的当前位置设置为拖动起始座标的偏移量,不然每一次的增量会累计了上一次的增量,造成增加速度比手指移动速度快)
         CGPoint translation = [gr translationInView:self];
         CGPoint begin = self.selectedLine.begin;
         CGPoint end = self.selectedLine.end;
@@ -163,6 +186,10 @@
         [self setNeedsDisplay];
         [gr setTranslation:CGPointZero inView:self];
     }
+}
+
+-(void)swipe:(UISwipeGestureRecognizer *)gr{
+    NSLog(@"Three finger swipe up");
 }
 
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
@@ -193,6 +220,17 @@
 - (void)strokeLine:(Line *)line{
     UIBezierPath *bp = [UIBezierPath bezierPath];
     bp.lineWidth = 10;
+    bp.lineCapStyle = kCGLineCapRound;
+    
+    [bp moveToPoint:line.begin];
+    [bp addLineToPoint:line.end];
+    [bp stroke];
+}
+
+#pragma mark - 绘制与判断绘制内容
+- (void)strokeLine:(Line *)line withLineWidth:(CGFloat)width{
+    UIBezierPath *bp = [UIBezierPath bezierPath];
+    bp.lineWidth = width;
     bp.lineCapStyle = kCGLineCapRound;
     
     [bp moveToPoint:line.begin];
@@ -255,7 +293,7 @@
     if (self.linesProgress.count > 0) {
         [[UIColor redColor] set];
         for (NSValue *key in self.linesProgress) {
-            [self strokeLine:self.linesProgress[key]];
+            [self strokeLine:self.linesProgress[key] withLineWidth:self.lineBezierPathWidth];
         }
     }
     self.currentRound = [self makeRound];
