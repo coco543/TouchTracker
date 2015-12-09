@@ -20,6 +20,10 @@
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = [[DrawViewController alloc]init];
     [self.window makeKeyAndVisible];
+    
+#ifdef VIEW_DEBUG
+    NSLog(@"%@",[self.window performSelector:@selector(recursiveDescription)]);
+#endif
     return YES;
 }
 

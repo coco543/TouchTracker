@@ -24,10 +24,12 @@
     self.view = view;
 }
 - (void)viewDidLoad {
+    [super viewDidLoad];
     NSLog(@"View didload");
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
     NSLog(@"View disappear");
     [NSKeyedArchiver archiveRootObject:self.view toFile:[self filePath]];
 }

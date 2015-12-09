@@ -15,7 +15,7 @@
     //弧度转角度
     angle = angle * 180 /M_PI;
     if (angle < 0) {
-        angle = fabsf(angle) * 2;
+        angle = fabs(angle) * 2;
     }
     if (angle > 360) {
         angle = 360;
@@ -31,8 +31,12 @@
     gradient[1] = [ColorAdjust makeGradientFromValue:fcomponents[1] toValue:tcomponents[1] step:360 index:angle];
     gradient[2] = [ColorAdjust makeGradientFromValue:fcomponents[2] toValue:tcomponents[2] step:360 index:angle];
     gradient[3] = 1.0;
-    UIColor *gradientUIColor = [[UIColor alloc] initWithCGColor:CGColorCreate(CGColorSpaceCreateDeviceRGB(), gradient)];
+    CGColorSpaceRef cgColorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGColorRef cgColorRef = CGColorCreate(cgColorSpaceRef, gradient);
+    UIColor *gradientUIColor = [[UIColor alloc] initWithCGColor:cgColorRef];
     
+    CGColorRelease(cgColorRef);
+    CGColorSpaceRelease(cgColorSpaceRef);
     return gradientUIColor;
 }
 

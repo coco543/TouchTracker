@@ -12,4 +12,6 @@
 @property (nonatomic) CGPoint begin;
 @property (nonatomic) CGPoint end;
 
+//@property (nonatomic,strong) NSMutableArray *containingArray;
+
 @end

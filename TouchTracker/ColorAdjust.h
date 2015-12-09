@@ -11,5 +11,5 @@
 @interface ColorAdjust : NSObject
 
 //根据传入角度(-180=>180),返回不同的颜色
-+(UIColor *)makeUIColorFrom:(UIColor *)fColor to:(UIColor *)tColor forAngle:(float)angle;
++(UIColor *)makeUIColorFrom:(UIColor *)fColor to:(UIColor *)tColor forAngle:(CGFloat)angle;
 @end

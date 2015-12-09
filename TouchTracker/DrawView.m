@@ -206,6 +206,7 @@
             NSLog(@"Alert YES");
             [self.finishedRounds removeAllObjects];
             [self.finishedLines removeAllObjects];
+//            self.finishedLines = [[NSMutableArray alloc] init];
             [self.linesProgress removeAllObjects];
             self.currentRound = nil;
             [self setNeedsDisplay];
@@ -276,6 +277,13 @@
     [self setNeedsDisplay];
 }
 
+-(int)numberOfLine{
+    int count;
+    if (self.finishedLines && self.linesProgress) {
+        count = [self.finishedLines count] + [self.linesProgress count];
+    }
+    return count;
+}
 
 - (void)drawRect:(CGRect)rect{
 //    已经绘制过的点用黑色画出
@@ -283,7 +291,9 @@
     for (Line *l in self.finishedLines) {
         //计算绘制线的弧度
         CGFloat angle = atan2( (l.end.y - l.begin.y), (l.end.x - l.begin.x));
-        [[ColorAdjust makeUIColorFrom:[UIColor redColor] to:[UIColor greenColor] forAngle:angle] set];
+        UIColor *start = [UIColor redColor];
+        UIColor *end = [UIColor greenColor];
+        [[ColorAdjust makeUIColorFrom:start to:end forAngle:angle] set];
         [self strokeLine:l];
     }
     for (Round *round in self.finishedRounds) {
@@ -310,6 +320,12 @@
 //        [self strokeLine:self.currentLine];
 //    }
 //    [path addArcWithCenter:center radius:currentRadius startAngle:0.0 endAngle:2*M_PI clockwise:YES];
+
+//    float f = 0.0;
+//    for (int i = 0; i < 1000000; i++) {
+//        f = f + sin(sin(sin(time(NULL) + i)));
+//    }
+//    NSLog(@"f = %f",f);
 }
 
 /**
@@ -405,9 +421,11 @@
     NSLog(@"%@",NSStringFromSelector(_cmd));
     for (UITouch *t in touches) {
         NSValue *key = [NSValue valueWithNonretainedObject:t];
-        if (self.linesProgress[key]) {
-            [self.finishedLines addObject:self.linesProgress[key]];
+        Line *line =  self.linesProgress[key];
+        if (line) {
+            [self.finishedLines addObject:line];
         }
+//        line.containingArray = self.finishedLines;
         [self.linesProgress removeObjectForKey:key];
         [self.touchPoints removeObjectForKey:key];
     }
